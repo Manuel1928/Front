@@ -6,6 +6,7 @@ import { AUTH_TOKEN } from '../constants';
 const Login = () => {
   const navigate = useNavigate();
   const [formState, setFormState] = useState({
+    login: true,
     email: '',
     password: '',
     username: ''
@@ -55,7 +56,7 @@ const Login = () => {
     variables:{
       email: formState.email,
       password: formState.password,
-      username: formState.name
+      username: formState.username
     },
     onCompleted: ({ signup }) => {
       localStorage.setItem(AUTH_TOKEN, signup.token);
