@@ -1,0 +1,59 @@
+name: Django CI/CD
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master, release ]
+  pull_request:
+    branches: [ master, release ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm tes
+    
+    - name: make .env 
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_TEST_SECRET_KEY : ${{ secrets.TEST_SECRET_KEY }}
+        envkey_TEST_DATABASE : ${{ secrets.TEST_DATABASE }}
+        envkey_TEST_USER : ${{ secrets.TEST_USER }}
+        envkey_TEST_PASSWORD : ${{ secrets.TEST_PASSWORD }}
+        envkey_TEST_HOST : ${{ secrets.TEST_HOST }}
+        envkey_TEST_PORT : ${{ secrets.TEST_PORT }}     
+        file_name: .env
+        fail_on_empty: false
+    - name: Run Tests
+      run: |
+        npm test
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy using ssh
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd /home/${{ secrets.USERNAME }}/Web
+          pwd
+          git pull origin release
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY}}
