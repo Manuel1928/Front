@@ -38,9 +38,7 @@ jobs:
         envkey_TEST_PORT : ${{ secrets.TEST_PORT }}     
         file_name: .env
         fail_on_empty: false
-    - name: Run Tests
-      run: |
-        npm test
+    
   deploy:
     needs: test
     runs-on: ubuntu-latest
