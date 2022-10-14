@@ -48,7 +48,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd /home/${{ secrets.USERNAME }}/Front
+          cd /home/${{ secrets.USERNAME }}
           pwd
           git pull origin release
         host: ${{ secrets.HOST }}
