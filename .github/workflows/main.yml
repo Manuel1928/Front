@@ -50,7 +50,7 @@ jobs:
         command: |
           cd /home/${{ secrets.USERNAME }}
           pwd
-          git pull origin release
+          ls
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY}}
