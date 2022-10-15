@@ -14,7 +14,7 @@ import {
 
 // 2
 const httpLink = createHttpLink({
-  uri: 'https://manuel1928-manuel1928.cloud.okteto.net/graphql/'
+  uri: 'manuel1928-manuel1928.cloud.okteto.net/graphql/'
 });
 
 // 3
